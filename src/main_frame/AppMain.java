@@ -14,15 +14,12 @@ public class AppMain {
 	public static String filepath;
 	
 	public static void main(String[] args) {
-		
 		JFileChooser fc = new JFileChooser(new File("."));
 		fc.showOpenDialog(null);
 		File file = fc.getSelectedFile();
 		if(file == null)
 			return;
 		filepath = file.getAbsolutePath();
-		System.out.println(filepath);	
-		
 		
 		try {
 			establishConnection();
@@ -45,18 +42,20 @@ public class AppMain {
 				"	id INTEGER PRIMARY KEY,\r\n" + 
 				"	name TEXT NOT NULL\r\n" + 
 				");",
-				"CREATE TABLE IF NOT EXISTS section (\r\n" + 
-				"	id INTEGER PRIMARY KEY,\r\n" + 
-				"	day INTEGER NOT NULL,\r\n" + 
-				"	start INTEGER NOT NULL,\r\n" + 
-				"	duration INTEGER NOT NULL\r\n" + 
-				");",
 				"CREATE TABLE IF NOT EXISTS class (\r\n" + 
 				"	id INTEGER PRIMARY KEY,\r\n" + 
 				"	subject_id INTEGER NOT NULL,\r\n" + 
-				"	sectionA INTEGER,\r\n" + 
-				"	sectionB INTEGER\r\n" + 
-				");"
+				"	FOREIGN KEY (subject_id) REFERENCES subject(id) ON UPDATE CASCADE ON DELETE CASCADE\r\n" + 
+				");",
+				"CREATE TABLE IF NOT EXISTS section (\r\n" + 
+				"	id INTEGER PRIMARY KEY,\r\n" + 
+				"	class_id INTEGER,\r\n" + 
+				"	day INTEGER NOT NULL,\r\n" + 
+				"	start INTEGER NOT NULL,\r\n" + 
+				"	duration INTEGER NOT NULL,\r\n" + 
+				"	FOREIGN KEY (class_id) REFERENCES class(id) ON UPDATE CASCADE ON DELETE CASCADE\r\n" + 
+				");",
+				"PRAGMA foreign_keys = ON;"
 		};
 		
 		Statement st = connection.createStatement();

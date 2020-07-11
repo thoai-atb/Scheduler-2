@@ -2,7 +2,6 @@ package main_tab;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,20 +11,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class SubjectPanel extends JPanel implements ActionListener {
+public class SubjectPanel extends JPanel implements ActionListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private IDHiddenTableModel tableModel = new IDHiddenTableModel(new String[] {"Subject"});
 	private JButton addB, deleteB;
-	private Connection con;
+	private MainPanel parent;
 	
-	public SubjectPanel(Connection con) {
-		this.con = con;
+	public SubjectPanel(MainPanel parent) {
+		this.parent = parent;
 		
 		this.setLayout(new BorderLayout());
 		table = new JTable(tableModel);
+		table.getSelectionModel().addListSelectionListener(this);
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		
 		JPanel control = new JPanel();
@@ -46,19 +48,22 @@ public class SubjectPanel extends JPanel implements ActionListener {
 	
 	public void loadTable() throws SQLException {
 		String sql = "SELECT * FROM subject";
-		Statement st = con.createStatement();
+		Statement st = parent.getConnection().createStatement();
 		ResultSet result = st.executeQuery(sql);
 		tableModel.clear();
 		while(result.next()) {
 			tableModel.addRecord(new String[] {result.getString(1), result.getString(2)});
 		}
 		st.close();
+		parent.updateClassPanel();
 	}
 	
 	private void add() throws SQLException {
 		String name = JOptionPane.showInputDialog("Enter Subject's Name");
+		if(name == null)
+			return;
 		String sql = String.format("INSERT INTO subject (name) VALUES ('%s');", name);
-		Statement st = con.createStatement();
+		Statement st = parent.getConnection().createStatement();
 		st.executeUpdate(sql);
 		loadTable();
 	}
@@ -69,7 +74,7 @@ public class SubjectPanel extends JPanel implements ActionListener {
 			int index = indices[i];
 			String id = tableModel.getID(index);
 			String sql = String.format("DELETE FROM subject WHERE id = '%s';", id);
-			Statement st = con.createStatement();
+			Statement st = parent.getConnection().createStatement();
 			st.executeUpdate(sql);
 		}
 		loadTable();
@@ -92,6 +97,18 @@ public class SubjectPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+	}
+	
+	public String getSelectedSubject() {
+		int index = table.getSelectedRow();
+		if(index < 0)
+			return null;
+		return tableModel.getID(index);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		parent.updateClassPanel();
 	}
 
 

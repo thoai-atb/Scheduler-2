@@ -5,7 +5,7 @@ import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import main_tab.SubjectPanel;
+import main_tab.MainPanel;
 import sql_tab.QueryUI;
 
 public class MainFrame extends JFrame {
@@ -20,13 +20,14 @@ public class MainFrame extends JFrame {
 		this.setLayout(new BorderLayout());
 		
 		JTabbedPane tp = new JTabbedPane();
-		tp.add(new SubjectPanel(con), "Control");
+		tp.add(new MainPanel(con), "Control");
 		tp.add(new QueryUI(con), "SQL");
 		this.add(tp);
 		
 		this.setSize(500, 500);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
