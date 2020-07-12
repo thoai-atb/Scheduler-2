@@ -1,4 +1,4 @@
-package main_tab;
+package main_tab.subject;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import main_tab.MainPanel;
 
 public class SubjectPanel extends JPanel implements ActionListener, ListSelectionListener {
 
@@ -26,6 +29,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		this.parent = parent;
 		
 		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createTitledBorder("SUBJECT"));
 		table = new JTable(tableModel);
 		table.getSelectionModel().addListSelectionListener(this);
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
@@ -70,6 +74,10 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 	
 	private void delete() throws SQLException {
 		int[] indices = table.getSelectedRows();
+		if(indices.length == 0) {
+			JOptionPane.showMessageDialog(null, "Please choose a subject to be deleted");
+			return;
+		}
 		for(int i = 0; i<indices.length; i++) {
 			int index = indices[i];
 			String id = tableModel.getID(index);

@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
 		tp.add(new QueryUI(con), "SQL");
 		this.add(tp);
 		
-		this.setSize(500, 500);
+		this.setSize(800, 400);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

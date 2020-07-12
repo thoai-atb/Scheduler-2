@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +30,7 @@ public class ClassPanel extends JPanel implements ActionListener {
 		this.parent = parent;
 		
 		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createTitledBorder("CLASS"));
 		table = new JTable(tableModel);
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		
@@ -74,7 +76,7 @@ public class ClassPanel extends JPanel implements ActionListener {
 	private void add() throws SQLException {
 		String subject = parent.getSelectedSubject();
 		if(subject == null) {
-			JOptionPane.showMessageDialog(null, "Please choose a subject to delete");
+			JOptionPane.showMessageDialog(null, "Please choose a subject to add the new class");
 			return;
 		}
 		new CreateClassFrame(this, parent.getSelectedSubject());
