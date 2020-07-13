@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import main_tab.ClassCourse;
+
 public class ClassTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
@@ -81,36 +83,5 @@ public class ClassTableModel extends AbstractTableModel {
 	
 	public String getID(int rowIndex) {
 		return data.get(getDataIndex(rowIndex)[0]).id;
-	}
-}
-
-class ClassCourse { // Can't name it "Class"
-	String id;
-	List<Section> sections = new ArrayList<Section>();
-	
-	public ClassCourse(String id) {
-		this.id = id;
-	}
-	
-	public void addSection(String day, String start, String duration) {
-		sections.add(new Section(day, start, duration));
-	}
-	
-	public int sectionCount() {
-		return sections.size();
-	}
-	
-	@Override
-	public String toString() {
-		return "CLASS ID: " + this.id + " Number of sections: " + sections.size();
-	}
-}
-
-class Section {
-	String day, start, duration;
-	public Section(String day, String start, String duration) {
-		this.day = day;
-		this.start = start;
-		this.duration = duration;
 	}
 }

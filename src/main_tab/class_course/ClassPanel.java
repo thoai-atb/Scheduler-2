@@ -26,6 +26,7 @@ public class ClassPanel extends JPanel implements ActionListener {
 	private JButton addB, deleteB;
 	private MainPanel parent;
 	
+	
 	public ClassPanel(MainPanel parent) {
 		this.parent = parent;
 		

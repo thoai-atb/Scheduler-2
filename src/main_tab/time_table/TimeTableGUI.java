@@ -16,17 +16,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import main_tab.MainPanel;
+
 public class TimeTableGUI extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	DefaultTableModel tableModel;
-	JTable jTable;
-	JButton nextButton, previousButton;
-	JLabel indexLabel;
-	int currentIndex = 0;
-	List<TimeTable> tables;
+	private DefaultTableModel tableModel;
+	private JTable jTable;
+	private JButton nextButton, previousButton;
+	private JLabel indexLabel;
+	private int currentIndex = 0;
+	private List<TimeTable> tables;
 	
-	public TimeTableGUI(List<TimeTable> tables) {
+	public TimeTableGUI(List<TimeTable> tables, MainPanel panel) {
 		super("Time Table");
 		setSize(600, 300);
 		setVisible(true);
@@ -78,7 +80,7 @@ public class TimeTableGUI extends JFrame {
 	
 	private void loadTable() {
 		tableModel.setRowCount(0);
-		if(tables.size() == 0)
+		if(tables == null || tables.size() == 0)
 			return;
 		String[][] table = tables.get(currentIndex).getTable();
 		for(int i = 0; i<table.length; i++) {

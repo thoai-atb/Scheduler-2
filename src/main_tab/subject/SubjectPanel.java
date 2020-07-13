@@ -22,7 +22,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private IDHiddenTableModel tableModel = new IDHiddenTableModel(new String[] {"Subject"});
-	private JButton addB, deleteB;
+	private JButton addB, deleteB, arrangeB;
 	private MainPanel parent;
 	
 	public SubjectPanel(MainPanel parent) {
@@ -35,13 +35,16 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		
 		JPanel control = new JPanel();
+		this.add(control, BorderLayout.SOUTH);
 		addB = new JButton("Add");
 		control.add(addB);
 		addB.addActionListener(this);
 		deleteB = new JButton("Delete");
 		control.add(deleteB);
 		deleteB.addActionListener(this);
-		this.add(control, BorderLayout.SOUTH);
+		arrangeB = new JButton("Arrange");
+		control.add(arrangeB);
+		arrangeB.addActionListener(this);
 		
 		try {
 			loadTable();
@@ -90,20 +93,16 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == addB) {
-			try {
+		try {
+			if(e.getSource() == addB) {
 				add();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		} else if(e.getSource() == deleteB) {
-			try {
+			} else if(e.getSource() == deleteB) {
 				delete();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} else if(e.getSource() == arrangeB) {
+				parent.arrange();
 			}
+		} catch (SQLException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
 		}
 	}
 	

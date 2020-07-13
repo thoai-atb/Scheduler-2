@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
 		this.add(tp);
 		
 		this.setSize(800, 400);
+//		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

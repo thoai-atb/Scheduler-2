@@ -37,7 +37,7 @@ public class AppMain {
 	}
 	
 	private static void createTables() throws SQLException {
-		String[] tables = {
+		String[] sqls = {
 				"CREATE TABLE IF NOT EXISTS subject (\r\n" + 
 				"	id INTEGER PRIMARY KEY,\r\n" + 
 				"	name TEXT NOT NULL\r\n" + 
@@ -55,12 +55,23 @@ public class AppMain {
 				"	duration INTEGER NOT NULL,\r\n" + 
 				"	FOREIGN KEY (class_id) REFERENCES class(id) ON UPDATE CASCADE ON DELETE CASCADE\r\n" + 
 				");",
+				"CREATE TABLE IF NOT EXISTS timetable (\r\n" + 
+				"	id INTEGER PRIMARY KEY,\r\n" + 
+				"	name TEXT NOT NULL\r\n" + 
+				");",
+				"CREATE TABLE IF NOT EXISTS schedule (\r\n" + 
+				"	id INTEGER PRIMARY KEY,\r\n" + 
+				"	class_id INTEGER,\r\n" + 
+				"	timetable_id INTEGER,\r\n" + 
+				"	FOREIGN KEY (class_id) REFERENCES class(id) ON UPDATE CASCADE ON DELETE CASCADE,\r\n" + 
+				"	FOREIGN KEY (timetable_id) REFERENCES timetable(id) ON UPDATE CASCADE ON DELETE CASCADE\r\n" + 
+				");",
 				"PRAGMA foreign_keys = ON;"
 		};
 		
 		Statement st = connection.createStatement();
-		for(int i = 0; i<tables.length; i++) {
-			st.execute(tables[i]);
+		for(int i = 0; i<sqls.length; i++) {
+			st.execute(sqls[i]);
 		}
 		st.close();
 	}
