@@ -6,10 +6,16 @@ import java.util.List;
 public class ClassCourse { // Can't name it "Class"
 	
 	public String id;
+	public Subject subject;
 	public List<Section> sections = new ArrayList<Section>();
 	
-	public ClassCourse(String id) {
+	public ClassCourse(String id, Subject subject) {
 		this.id = id;
+		this.subject = subject;
+	}
+	
+	public String getName() {
+		return subject.name;
 	}
 	
 	public void addSection(String day, String start, String duration) {

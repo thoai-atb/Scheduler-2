@@ -1,4 +1,4 @@
-package main_tab.subject;
+package main_tab.time_table;
 
 
 import java.util.ArrayList;

@@ -58,12 +58,12 @@ public class ClassPanel extends JPanel implements ActionListener {
 			return;
 		
 		String sql = String.format("SELECT id FROM class WHERE subject_id = '%s'", subjectID);
-		Statement st = parent.getConnection().createStatement();
+		Statement st = parent.getConnection(false).createStatement();
 		ResultSet result = st.executeQuery(sql);
 		while(result.next()) {
 			String classID = result.getString("id");
 			sql = String.format("SELECT day, start, duration FROM section WHERE class_id = '%s'", classID);
-			Statement st2 = parent.getConnection().createStatement();
+			Statement st2 = parent.getConnection(false).createStatement();
 			ResultSet sectionR = st2.executeQuery(sql);
 			List<String[]> sections = new ArrayList<String[]>();
 			while(sectionR.next()) {
@@ -90,7 +90,7 @@ public class ClassPanel extends JPanel implements ActionListener {
 		}
 		String classID = tableModel.getID(table.getSelectedRow());
 		String sql = String.format("DELETE FROM class WHERE id = '%s';", classID);
-		Statement st = parent.getConnection().createStatement();
+		Statement st = parent.getConnection(true).createStatement();
 		st.executeUpdate(sql);
 		loadTable();
 	}
@@ -116,7 +116,7 @@ public class ClassPanel extends JPanel implements ActionListener {
 	
 	public void addNewClass(String subjectID, String[][] sections) throws SQLException {
 		String sql = String.format("INSERT INTO class (subject_id) VALUES ('%s');", subjectID);
-		Statement st = parent.getConnection().createStatement();
+		Statement st = parent.getConnection(true).createStatement();
 		st.executeUpdate(sql);
 		
 		sql = String.format("SELECT last_insert_rowid()");

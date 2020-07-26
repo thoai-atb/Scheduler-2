@@ -23,7 +23,7 @@ public class ClassTableModel extends AbstractTableModel {
 	}
 	
 	public void addRecord(String classID, List<String[]> records) {
-		ClassCourse c = new ClassCourse(classID);
+		ClassCourse c = new ClassCourse(classID, null);
 		for(String[] r : records) {
 			c.addSection(r[0], r[1], r[2]);
 		}

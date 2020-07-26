@@ -21,7 +21,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
-	private IDHiddenTableModel tableModel = new IDHiddenTableModel(new String[] {"Subject"});
+	private SubjectTableModel tableModel;
 	private JButton addB, deleteB, arrangeB;
 	private MainPanel parent;
 	
@@ -30,8 +30,10 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createTitledBorder("SUBJECT"));
-		table = new JTable(tableModel);
+		table = new JTable();
+		tableModel = new SubjectTableModel(table, parent);
 		table.getSelectionModel().addListSelectionListener(this);
+//		table.setDefaultRenderer(Boolean.class, new SubjectTableRenderer());
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		
 		JPanel control = new JPanel();
@@ -55,11 +57,11 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 	
 	public void loadTable() throws SQLException {
 		String sql = "SELECT * FROM subject";
-		Statement st = parent.getConnection().createStatement();
+		Statement st = parent.getConnection(false).createStatement();
 		ResultSet result = st.executeQuery(sql);
 		tableModel.clear();
 		while(result.next()) {
-			tableModel.addRecord(new String[] {result.getString(1), result.getString(2)});
+			tableModel.addRecord(result.getString("id"), result.getString("name"), result.getBoolean("included"), result.getBoolean("required"));
 		}
 		st.close();
 		parent.updateClassPanel();
@@ -70,7 +72,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		if(name == null)
 			return;
 		String sql = String.format("INSERT INTO subject (name) VALUES ('%s');", name);
-		Statement st = parent.getConnection().createStatement();
+		Statement st = parent.getConnection(true).createStatement();
 		st.executeUpdate(sql);
 		loadTable();
 	}
@@ -85,7 +87,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 			int index = indices[i];
 			String id = tableModel.getID(index);
 			String sql = String.format("DELETE FROM subject WHERE id = '%s';", id);
-			Statement st = parent.getConnection().createStatement();
+			Statement st = parent.getConnection(true).createStatement();
 			st.executeUpdate(sql);
 		}
 		loadTable();
