@@ -69,7 +69,7 @@ public class Scheduler {
 			}
 		}
 		
-//		tables.sort(null);
+		tables.sort(null);
 		new TimeTableGUI(tables, panel, false);
 	}
 

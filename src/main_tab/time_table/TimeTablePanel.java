@@ -22,8 +22,7 @@ public class TimeTablePanel extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private MainPanel parent;
-	private JButton showB;
-	private JButton deleteB;
+	private JButton showB, deleteB, renameB;
 	private IDHiddenTableModel tableModel = new IDHiddenTableModel(new String[] {"Name"});
 	private JTable table;
 
@@ -41,6 +40,8 @@ public class TimeTablePanel extends JPanel implements ActionListener {
 		showB.addActionListener(this);
 		control.add(deleteB = new JButton("Delete"));
 		deleteB.addActionListener(this);
+		control.add(renameB = new JButton("Rename"));
+		renameB.addActionListener(this);
 		
 		try {
 			loadTable();
@@ -94,12 +95,29 @@ public class TimeTablePanel extends JPanel implements ActionListener {
 				}
 				TimeTableGUI.createView(parent.getTimeTable(tableModel.getID(index)));
 			} else if(src == deleteB) {
+				int indices[] = table.getSelectedRows();
+				if(indices.length == 0) {
+					JOptionPane.showMessageDialog(null, "Please choose a timetable");
+					return;
+				}
+				for(int index : indices) {
+					String sql = String.format("DELETE FROM timetable WHERE id = '%s'", tableModel.getID(index));
+					Statement st = parent.getConnection(true).createStatement();
+					st.executeUpdate(sql);
+				}
+				loadTable();
+			} else if(src == renameB) {
 				int index = table.getSelectedRow();
 				if(index < 0) {
 					JOptionPane.showMessageDialog(null, "Please choose a timetable");
 					return;
 				}
-				String sql = String.format("DELETE FROM timetable WHERE id = '%s'", tableModel.getID(index));
+				String name = JOptionPane.showInputDialog(null, "Enter new name:", tableModel.getValueAt(index, 0));
+				if(name == null || name.isBlank()) {
+					JOptionPane.showMessageDialog(null, "Name can't be blank!");
+					return;
+				}
+				String sql = String.format("UPDATE timetable SET name = '%s' WHERE id = '%s';", name, tableModel.getID(index));
 				Statement st = parent.getConnection(true).createStatement();
 				st.executeUpdate(sql);
 				loadTable();

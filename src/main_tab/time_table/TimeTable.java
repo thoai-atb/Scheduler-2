@@ -7,7 +7,7 @@ import java.util.List;
 import main_tab.ClassCourse;
 import main_tab.Section;
 
-public class TimeTable {
+public class TimeTable implements Comparable<TimeTable> {
 	
 	List<ClassCourse> classes = new ArrayList<ClassCourse>();
 	
@@ -29,13 +29,16 @@ public class TimeTable {
 	}
 	
 	public boolean conflict(Section a, Section b) {
-		if(a.day != b.day)
+		if(!a.day.equals(b.day)) {
 			return false;
+		}
 		int as = Integer.parseInt(a.start);
 		int bs = Integer.parseInt(b.start);
 		int ad = Integer.parseInt(a.duration);
 		int bd = Integer.parseInt(b.duration);
-		return as < bs + bd && bs < as + ad;
+
+		boolean con = as < bs + bd && bs < as + ad;
+		return con;
 	}
 	
 	public String[][] getTable(){
@@ -61,5 +64,10 @@ public class TimeTable {
 		}
 		
 		return table;
+	}
+
+	@Override
+	public int compareTo(TimeTable o) {
+		return o.classes.size() - this.classes.size();
 	}
 }

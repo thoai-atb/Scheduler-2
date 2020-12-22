@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import main_tab.MainPanel;
+import main_tab.scheduler.Scheduler;
 import sql_tab.QueryUI;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -27,27 +28,44 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenuItem newI = new JMenuItem("New");
 	private JMenuItem saveI = new JMenuItem("Save");
 	private JMenuItem openI = new JMenuItem("Open");
+	private JMenuItem arrangeI = new JMenuItem("Arrange");
+	private JMenuItem guideI = new JMenuItem("How to use Scheduler?");
+	private JMenuItem aboutI = new JMenuItem("About");
+	private Scheduler scheduler;
 	private boolean saved = true;
 	
 	public MainFrame (String path, Connection con) throws SQLException {
-		super(path + " - Scheduler 2");
+		super(path + " - Scheduler " + AppMain.version);
 		this.con = con;
 		createTables();
 		
 		this.setLayout(new BorderLayout());
-		JMenu menu = new JMenu("File");
+		JMenu fileM = new JMenu("File");
 		newI.addActionListener(this);
 		saveI.addActionListener(this);
 		openI.addActionListener(this);
-		menu.add(newI);
-		menu.add(saveI);
-		menu.add(openI);
+		fileM.add(newI);
+		fileM.add(saveI);
+		fileM.add(openI);
+		JMenu actionM = new JMenu("Action");
+		arrangeI.addActionListener(this);
+		actionM.add(arrangeI);
+		JMenu helpM = new JMenu("Help");
+		helpM.add(guideI);
+		guideI.addActionListener(this);
+		helpM.add(aboutI);
+		aboutI.addActionListener(this);
+		
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(menu);
+		menuBar.add(fileM);
+		menuBar.add(actionM);
+		menuBar.add(helpM);
 		this.setJMenuBar(menuBar);
 		
 		JTabbedPane tp = new JTabbedPane();
-		tp.add(new MainPanel(this), "Control");
+		MainPanel mainPanel = new MainPanel(this);
+		scheduler = new Scheduler(mainPanel);
+		tp.add(mainPanel, "Control");
 		tp.add(new QueryUI(con), "SQL");
 		this.add(tp);
 		
@@ -180,6 +198,12 @@ public class MainFrame extends JFrame implements ActionListener {
 				open();
 			}else if(juice == saveI) {
 				save();
+			}else if(juice == arrangeI) {
+				scheduler.arrange();
+			}else if(juice == guideI) {
+				new GuideFrame();
+			}else if(juice == aboutI) {
+				new AboutFrame();
 			}
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());

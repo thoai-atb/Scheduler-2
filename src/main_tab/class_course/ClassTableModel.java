@@ -72,13 +72,17 @@ public class ClassTableModel extends AbstractTableModel {
 			return indices[1] == 0? indices[0] : "";
 		
 		if(columnIndex == 1)
-			return data.get(indices[0]).sections.get(indices[1]).day;
+			return threeLetterDay(data.get(indices[0]).sections.get(indices[1]).day);
 		if(columnIndex == 2)
 			return data.get(indices[0]).sections.get(indices[1]).start;
 		if(columnIndex == 3)
 			return data.get(indices[0]).sections.get(indices[1]).duration;
 		
 		return null;
+	}
+	
+	private String threeLetterDay(String day) {
+		return day.substring(0, 3);
 	}
 	
 	public String getID(int rowIndex) {

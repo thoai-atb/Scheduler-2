@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 
 import main_frame.MainFrame;
 import main_tab.class_course.ClassPanel;
-import main_tab.scheduler.Scheduler;
 import main_tab.subject.SubjectPanel;
 import main_tab.time_table.TimeTable;
 import main_tab.time_table.TimeTablePanel;
@@ -23,7 +22,6 @@ public class MainPanel extends JPanel {
 	private SubjectPanel subjectPanel;
 	private ClassPanel classPanel;
 	private TimeTablePanel timeTablePanel;
-	private Scheduler scheduler;
 	private MainFrame frame;
 	
 	public MainPanel(MainFrame frame) {
@@ -32,8 +30,6 @@ public class MainPanel extends JPanel {
 		this.add(subjectPanel = new SubjectPanel(this));
 		this.add(classPanel = new ClassPanel(this));
 		this.add(timeTablePanel = new TimeTablePanel(this));
-		
-		scheduler = new Scheduler(this);
 	}
 	
 	public Connection getConnection(boolean update) {
@@ -52,10 +48,6 @@ public class MainPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public void arrange() throws SQLException {
-		scheduler.arrange();
 	}
 	
 	public void saveTimeTable(TimeTable table, String name) throws SQLException {

@@ -22,7 +22,7 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private SubjectTableModel tableModel;
-	private JButton addB, deleteB, arrangeB;
+	private JButton addB, deleteB, renameB;
 	private MainPanel parent;
 	
 	public SubjectPanel(MainPanel parent) {
@@ -44,9 +44,9 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		deleteB = new JButton("Delete");
 		control.add(deleteB);
 		deleteB.addActionListener(this);
-		arrangeB = new JButton("Arrange");
-		control.add(arrangeB);
-		arrangeB.addActionListener(this);
+		renameB = new JButton("Rename");
+		control.add(renameB);
+		renameB.addActionListener(this);
 		
 		try {
 			loadTable();
@@ -92,6 +92,23 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 		}
 		loadTable();
 	}
+	
+	private void rename() throws SQLException {
+		int index = table.getSelectedRow();
+		if(index < 0) {
+			JOptionPane.showMessageDialog(null, "Please choose a subject to be renamed");
+			return;
+		}
+		String name = JOptionPane.showInputDialog(null, "Please enter a new name for this subject", tableModel.getValueAt(index, 0));
+		if(name == null || name.isBlank()) {
+			JOptionPane.showMessageDialog(null, "Name can't be blank");
+			return;
+		}
+		String sql = String.format("UPDATE subject SET name = '%s' WHERE id = '%s';", name, tableModel.getID(index));
+		Statement st = parent.getConnection(true).createStatement();
+		st.executeUpdate(sql);
+		loadTable();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -100,8 +117,8 @@ public class SubjectPanel extends JPanel implements ActionListener, ListSelectio
 				add();
 			} else if(e.getSource() == deleteB) {
 				delete();
-			} else if(e.getSource() == arrangeB) {
-				parent.arrange();
+			} else if(e.getSource() == renameB) {
+				rename();
 			}
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());

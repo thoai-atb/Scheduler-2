@@ -111,7 +111,7 @@ public class TimeTableGUI extends JFrame {
 	}
 	
 	private void save() {
-		String name = JOptionPane.showInputDialog("Save as:");
+		String name = JOptionPane.showInputDialog("Enter name for this Timetable:");
 		if(name == null)
 			return;
 		try {

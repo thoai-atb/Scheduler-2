@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 
 public class AppMain {
 	
+	public static String version = "2.0.0";
+	
 	public static void main(String[] args) {
 		File directory = new File("MySchedules");
 		directory.mkdir();
